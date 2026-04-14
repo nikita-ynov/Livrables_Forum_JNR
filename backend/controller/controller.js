@@ -1,4 +1,4 @@
-const SHA512 = require('SHA512');
+const crypto = require('crypto');
 const connexion = require('../DB/db.js');
 
 module.exports = {};
