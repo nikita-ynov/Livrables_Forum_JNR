@@ -17,5 +17,147 @@ body {
     font-family: "Roboto", sans-serif;
     background: var(--neutral);
     color: var(--primary);
+    display: flex;
 }
 
+ul,
+li,
+a {
+    list-style: none;
+    color: var(--primary);
+}
+
+
+.container {
+    width: 95vw;
+    max-width: 650px;
+    margin: 0 auto;
+}
+
+h1 {
+    text-align: center;
+    padding: 1rem 0;
+    font-size: 1.4rem;
+}
+
+/* COMPONENTS */
+
+/* Button */
+
+button {
+    border: none;
+    background: var(--primary);
+    color: var(--neutral);
+    padding: .5rem 1rem;
+    border-radius: 1rem;
+    cursor: pointer;
+}
+
+.ghost {
+    background: transparent;
+    color: var(--secondary);
+    border: 1px solid var(--secondary);
+}
+
+/* Sidebar */
+.sidebar {
+    /* background: #000; */
+    min-height: 100vh;
+    width: 5vw;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 0;
+
+}
+
+.sidebar .logo img {
+    width: 3rem;
+    height: 5rem;
+    object-fit: contain;
+}
+
+.sidebar li {
+    margin: 3rem 0;
+    padding: .5rem;
+    border-radius: 1rem;
+}
+
+.active {
+    background: #00000013;
+}
+
+.sidebar .icon {
+    width: 1.7rem;
+}
+
+.sidebar .login {
+    height: 5rem;
+
+}
+
+/* Topic */
+
+.topic {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+}
+
+.topic .info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 1rem;
+}
+
+.topic .date {
+    color: var(--secondary);
+}
+
+.topic .author {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+.topic .avatar {
+    width: 3rem;
+    height: 3rem;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.topic .message {
+    border-left: 1px solid var(--secondary);
+    margin-left: 1.5rem;
+    padding-left: 1rem;
+}
+
+.topic .message img {
+    max-width: 100%;
+    max-height: 300px;
+    padding: .5rem 0;
+}
+.topic .message h2 {
+    padding-bottom: .5rem;
+}
+.topic .message p {
+    color: var(--secondary);
+}
+
+.topic .actions {
+    display: flex;
+    gap: 1rem;
+    padding-top: 1rem;
+    margin-left: 2.5rem;
+}
+
+.topic .actions img {
+    width: 1.3rem;
+    cursor: pointer;
+}

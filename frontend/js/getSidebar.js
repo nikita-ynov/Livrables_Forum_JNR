@@ -3,3 +3,4 @@ fetch("./components/sidebar.html")
     .then(data => {
         document.getElementById("sidebar").innerHTML = data;
     });
+
