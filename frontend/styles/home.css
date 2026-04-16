@@ -2,3 +2,22 @@
     text-align: center;
     margin: 3rem 0;
 }
+
+.categorys {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 3rem;
+}
+
+.categorys .category {
+    background: var(--tertiary);
+    padding: .5rem 1rem;
+    border-radius: 1rem;
+    font-size: .8rem;
+    cursor: pointer;
+}
+
+.categorys .active {
+    background: var(--primary);
+    color: var(--tertiary);
+}
