@@ -5,81 +5,263 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Yo.</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="./styles/main.css">
     <link rel="stylesheet" href="./styles/home.css">
 </head>
 
 <body>
-    <div id="sidebar"></div>
 
-    <div class="container home">
-        <h1>Home</h1>
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar__logo">
+            <span class="logo-text">Y.</span>
+        </div>
+        <nav class="sidebar__nav">
+            <ul>
+                <li class="active" title="Home">
+                    <a href="#">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z" />
+                            <path d="M9 21V12h6v9" />
+                        </svg>
+                    </a>
+                </li>
+       
+                <li title="New post">
+                    <a href="#" class="add-btn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 5v14M5 12h14" />
+                        </svg>
+                    </a>
+                </li>
+           
+                <li title="Profile">
+                    <a href="#">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+                            <circle cx="12" cy="7" r="4" />
+                        </svg>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        <div class="sidebar__login">
+            <button class="login-btn">Log in</button>
+        </div>
+    </aside>
+
+    <!-- Bottom nav (mobile) -->
+    <nav class="bottom-nav">
+        <a href="#" class="bottom-nav__item active">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+                stroke-linejoin="round">
+                <path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z" />
+            </svg>
+        </a>
+ 
+        <a href="#" class="bottom-nav__item bottom-nav__add">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+                stroke-linejoin="round">
+                <path d="M12 5v14M5 12h14" />
+            </svg>
+        </a>
+
+        <a href="#" class="bottom-nav__item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+                stroke-linejoin="round">
+                <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
+            </svg>
+        </a>
+    </nav>
+
+    <!--  -->
+
+    <main class="container home">
+        <header class="home__header">
+            <h1>Home</h1>
+        </header>
 
         <label class="search__container">
-            <img src="assets/icons/search.png" alt="">
-            <input type="text" placeholder="Rechercher une conversation...">
+            <svg class="search__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8" />
+                <path d="M21 21l-4.35-4.35" />
+            </svg>
+            <input type="text" placeholder="Rechercher une conversation…">
         </label>
 
         <div class="categorys">
-            <div class="category active">TOUS</div>
-            <div class="category">DESIGN</div>
-            <div class="category">CULTURE</div>
-            <div class="category">TECHNOLOGIE</div>
-            <div class="category">MODE</div>
+            <button class="category active">TOUS</button>
+            <button class="category">DESIGN</button>
+            <button class="category">CULTURE</button>
+            <button class="category">TECHNOLOGIE</button>
+            <button class="category">MODE</button>
         </div>
 
         <div class="topic">
-            <div class="topic__msg">
+
+            <article class="topic__msg">
                 <div class="info">
                     <div class="author">
-                        <img src="assets/avatar.jpg" alt="" class="avatar">
-                        John Babers
+                        <div class="avatar-wrap">
+                            <img src="assets/avatar.jpg" alt="John Babers" class="avatar">
+                        </div>
+                        <div class="author__meta">
+                            <span class="author__name">John Babers</span>
+                            <span class="author__tag">DESIGN</span>
+                        </div>
                     </div>
-                    <div class="date">
-                        IL Y A 2H
-                    </div>
+                    <div class="date">IL Y A 2H</div>
                 </div>
                 <div class="message">
-                    <h2>Title of Topic</h2>
+                    <h2>The Future of Spatial Interfaces</h2>
                     <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Necessitatibus ipsa illo deleniti
                         labore officia neque vero. Eos et assumenda repudiandae quidem voluptatum ex est illum quasi,
-                        earum inventore, tempore delectus!</p>
+                        earum inventore.</p>
                 </div>
                 <div class="actions">
-                    <img src="assets/icons/like.png" alt="">
-                    <img src="assets/icons/comment.png" alt="">
+                    <button class="action-btn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path
+                                d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" />
+                        </svg>
+                        <span>24</span>
+                    </button>
+                    <button class="action-btn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
+                        </svg>
+                        <span>8</span>
+                    </button>
+                    <button class="action-btn action-btn--share">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="18" cy="5" r="3" />
+                            <circle cx="6" cy="12" r="3" />
+                            <circle cx="18" cy="19" r="3" />
+                            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
+                            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+                        </svg>
+                    </button>
                 </div>
-            </div>
-            <div class="topic__msg">
+            </article>
+
+            <article class="topic__msg topic__msg--media">
                 <div class="info">
                     <div class="author">
-                        <img src="assets/avatar.jpg" alt="" class="avatar">
-                        John Babers
+                        <div class="avatar-wrap">
+                            <img src="assets/avatar.jpg" alt="Sarah Klein" class="avatar">
+                        </div>
+                        <div class="author__meta">
+                            <span class="author__name">Sarah Klein</span>
+                            <span class="author__tag">CULTURE</span>
+                        </div>
                     </div>
-                    <div class="date">
-                        HIER
-                    </div>
+                    <div class="date">HIER</div>
                 </div>
                 <div class="message">
-                    <h2>Title of Topic</h2>
-                    <img src="assets/avatar.jpg" alt="">
-                    <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Necessitatibus ipsa illo deleniti
-                        labore officia neque vero. Eos et assumenda repudiandae quidem voluptatum ex est illum quasi,
-                        earum inventore, tempore delectus!</p>
+                    <h2>How Museums Are Reinventing Themselves</h2>
+                    <div class="message__image-wrap">
+                        <img src="https://images.unsplash.com/photo-1554907984-15263bfd63bd?w=700&q=80"
+                            alt="Museum interior">
+                    </div>
+                    <p>Adipisicing elit. Necessitatibus ipsa illo deleniti labore officia neque vero. Eos et assumenda
+                        repudiandae quidem voluptatum ex est illum quasi.</p>
                 </div>
                 <div class="actions">
-                    <img src="assets/icons/like.png" alt="">
-                    <img src="assets/icons/comment.png" alt="">
+                    <button class="action-btn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path
+                                d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" />
+                        </svg>
+                        <span>61</span>
+                    </button>
+                    <button class="action-btn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
+                        </svg>
+                        <span>17</span>
+                    </button>
+                    <button class="action-btn action-btn--share">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="18" cy="5" r="3" />
+                            <circle cx="6" cy="12" r="3" />
+                            <circle cx="18" cy="19" r="3" />
+                            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
+                            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+                        </svg>
+                    </button>
                 </div>
-            </div>
+            </article>
+
+            <article class="topic__msg">
+                <div class="info">
+                    <div class="author">
+                        <div class="avatar-wrap">
+                            <img src="assets/avatar.jpg" alt="Marc Dupont" class="avatar">
+                        </div>
+                        <div class="author__meta">
+                            <span class="author__name">Marc Dupont</span>
+                            <span class="author__tag">TECHNOLOGIE</span>
+                        </div>
+                    </div>
+                    <div class="date">IL Y A 3J</div>
+                </div>
+                <div class="message">
+                    <h2>The Quiet Revolution in Open Source AI</h2>
+                    <p>Necessitatibus ipsa illo deleniti labore officia neque vero. Eos et assumenda repudiandae quidem
+                        voluptatum ex est illum quasi, earum inventore, tempore delectus laboriosam.</p>
+                </div>
+                <div class="actions">
+                    <button class="action-btn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path
+                                d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" />
+                        </svg>
+                        <span>39</span>
+                    </button>
+                    <button class="action-btn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
+                        </svg>
+                        <span>5</span>
+                    </button>
+                    <button class="action-btn action-btn--share">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="18" cy="5" r="3" />
+                            <circle cx="6" cy="12" r="3" />
+                            <circle cx="18" cy="19" r="3" />
+                            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
+                            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+                        </svg>
+                    </button>
+                </div>
+            </article>
         </div>
+
         <div class="more">
             <button class="ghost">AFFICHER PLUS DE CONVERSATIONS</button>
-
         </div>
-    </div>
+    </main>
 
+    <script src="./js/script.js"></script>
 </body>
-<script src="./js/getSidebar.js"></script>
 
 </html>
