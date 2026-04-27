@@ -65,7 +65,7 @@ a {
     transition: width var(--transition);
 }
 
-.sidebar__logo .logo-text {
+.logo-text {
     font-family: "DM Serif Display", serif;
     font-size: 1.8rem;
     font-weight: 400;

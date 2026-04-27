@@ -1,0 +1,129 @@
+/* create.css */
+
+.create-post {
+    padding-top: 2rem;
+    padding-bottom: 4rem;
+    animation: fadeUp 0.4s ease both;
+}
+
+.create-post__header {
+    margin-bottom: 2.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.create-post__header h1 {
+    font-size: 2.2rem;
+    margin-bottom: 0.5rem;
+}
+
+.create-post__header p {
+    color: var(--secondary);
+    font-size: 1rem;
+}
+
+.create-post__form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.8rem;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+}
+
+.input-group label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: var(--secondary);
+}
+
+/* Стилизация select внутри обертки search__container */
+.category-select {
+    width: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-family: "DM Sans", sans-serif;
+    font-size: 0.92rem;
+    color: var(--primary);
+    cursor: pointer;
+    appearance: none; /* Убираем стандартную стрелку */
+}
+
+/* Стилизация textarea */
+.textarea-container {
+    padding: 1rem 1.2rem;
+    align-items: flex-start;
+}
+
+textarea {
+    width: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-family: "DM Sans", sans-serif;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--primary);
+    resize: vertical;
+    min-height: 120px;
+}
+
+/* Поле загрузки файла */
+.file-upload {
+    border: 2px dashed var(--border);
+    border-radius: var(--radius-md);
+    padding: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all var(--transition);
+}
+
+.file-upload:hover {
+    border-color: var(--primary);
+    background: var(--hover);
+}
+
+.file-upload__content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.8rem;
+    color: var(--secondary);
+}
+
+.file-upload__content svg {
+    width: 32px;
+    height: 32px;
+}
+
+.file-upload__content span {
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+/* Кнопки внизу */
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 1rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border);
+}
+
+.form-actions button {
+    padding: 0.8rem 1.8rem;
+}
+
+@media (max-width: 700px) {
+    .create-post {
+        padding-bottom: 100px; /* Отступ для мобильной навигации */
+    }
+}
