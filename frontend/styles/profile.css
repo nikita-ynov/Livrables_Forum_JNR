@@ -1,0 +1,272 @@
+/* profile.css */
+
+.profile-page {
+    padding-top: 3rem;
+    padding-bottom: 4rem;
+    animation: fadeUp 0.4s ease both;
+}
+
+/* Header профиля */
+.profile-header {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    margin-bottom: 2rem;
+}
+
+.profile-header__top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.profile-avatar-wrap {
+    width: 85px;
+    height: 85px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 1px solid var(--border);
+}
+
+.profile-avatar {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profile-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.icon-btn {
+    background: transparent;
+    color: var(--primary);
+    border: 1.5px solid var(--border);
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    transition: var(--transition);
+}
+
+.icon-btn:hover {
+    border-color: var(--primary);
+}
+
+.icon-btn svg {
+    width: 18px;
+    height: 18px;
+}
+
+/* Информация профиля */
+.profile-info h1 {
+    font-size: 1.6rem;
+    margin-bottom: 0.2rem;
+}
+
+.profile-handle {
+    font-size: 0.9rem;
+    color: var(--secondary);
+    display: block;
+    margin-bottom: 1rem;
+}
+
+.profile-bio {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    max-width: 550px;
+    margin-bottom: 1.2rem;
+}
+
+.profile-stats {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.stat {
+    display: flex;
+    gap: 0.4rem;
+    font-size: 0.9rem;
+    color: var(--secondary);
+}
+
+.stat strong {
+    color: var(--primary);
+    font-weight: 600;
+}
+
+/* Табы под профилем */
+.profile-tabs {
+    display: flex;
+    gap: 2rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 1.5rem;
+}
+
+.tab {
+    background: transparent;
+    border: none;
+    padding: 0 0 0.8rem 0;
+    color: var(--secondary);
+    font-size: 0.9rem;
+    font-weight: 600;
+    border-radius: 0;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.tab:hover {
+    color: var(--primary);
+    opacity: 1;
+}
+
+.tab.active {
+    color: var(--primary);
+    border-bottom-color: var(--primary);
+}
+
+
+/* МОДАЛЬНОЕ ОКНО */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    padding: 1rem;
+}
+
+.modal-overlay.show {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.modal-content {
+    background: var(--neutral);
+    width: 100%;
+    max-width: 500px;
+    border-radius: var(--radius-md);
+    padding: 2rem;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    transform: translateY(20px);
+    transition: transform 0.3s ease;
+}
+
+.modal-overlay.show .modal-content {
+    transform: translateY(0);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.modal-header h2 {
+    font-size: 1.3rem;
+}
+
+.close-btn {
+    background: transparent;
+    color: var(--secondary);
+    border: none;
+    padding: 0.4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.close-btn:hover {
+    color: var(--primary);
+    opacity: 1;
+}
+
+.close-btn svg {
+    width: 22px;
+    height: 22px;
+}
+
+.modal-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.modal-avatar-edit {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+}
+
+.avatar-preview {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.input-group label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: var(--secondary);
+}
+
+.textarea-container {
+    padding: 0.8rem 1.1rem;
+    align-items: flex-start;
+}
+
+.textarea-container textarea {
+    width: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-family: "DM Sans", sans-serif;
+    font-size: 0.92rem;
+    color: var(--primary);
+    resize: none;
+}
+
+.modal-save-btn {
+    margin-top: 1rem;
+    width: 100%;
+    padding: 0.95rem;
+}
+
+@media (max-width: 420px) {
+    .profile-avatar-wrap {
+        width: 70px;
+        height: 70px;
+    }
+    
+    .profile-info h1 {
+        font-size: 1.4rem;
+    }
+    
+    .modal-content {
+        padding: 1.5rem;
+    }
+}
