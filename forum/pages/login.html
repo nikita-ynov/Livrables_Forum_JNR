@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,9 +10,7 @@
     <link rel="stylesheet" href="../styles/main.css">
     <link rel="stylesheet" href="../styles/login.css">
 </head>
-
 <body>
-
     <main class="auth-page">
         <div class="auth-container">
             <div class="auth-header">
@@ -21,23 +18,19 @@
                 <h1>Heureux de vous revoir</h1>
                 <p>Entrez vos accès pour rejoindre la conversation.</p>
             </div>
-
-            <form class="auth__form" action="POST">
+            <form class="auth__form" id="loginForm">
                 <div class="input-group">
-                    <label for="username">IDENTIFIANT</label>
+                    <label for="identifier">IDENTIFIANT</label>
                     <div class="search__container">
                         <svg class="search__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
-                            <circle cx="12" cy="7" r="4" />
+                            <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/>
                         </svg>
-                        <input type="text" id="username" placeholder="votre_pseudo" required>
+                        <input type="text" id="identifier" placeholder="votre_pseudo" required>
                     </div>
                 </div>
-
                 <div class="input-group">
                     <div class="label-row">
                         <label for="password">MOT DE PASSE</label>
-                        <a href="#" class="forgot-link">OUBLIÉ ?</a>
                     </div>
                     <div class="search__container">
                         <svg class="search__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
@@ -47,17 +40,37 @@
                         <input type="password" id="password" placeholder="••••••••" required>
                     </div>
                 </div>
-
-                <button type="submit" class="auth-submit-btn">Se connecter</button>
-
+                <button type="submit" class="auth-submit-btn" id="submitBtn">Se connecter</button>
                 <div class="auth-footer-prompt">
                     <span>Pas encore de compte ?</span>
-                    <a href="../pages/signup.html">Créer un profil</a>
+                    <a href="./signup.html">Créer un profil</a>
                 </div>
             </form>
         </div>
     </main>
+    <script src="../js/api.js"></script>
+    <script>
+        if (Session.isLoggedIn()) window.location.href = '/index.html';
 
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('submitBtn');
+            btn.disabled = true;
+            btn.textContent = 'Connexion…';
+            try {
+                const user = await post('/login', {
+                    identifier: document.getElementById('identifier').value.trim(),
+                    password:   document.getElementById('password').value,
+                });
+                Session.set(user);
+                toast('Bienvenue ' + user.username + ' !', 'success');
+                setTimeout(() => window.location.href = '/index.html', 600);
+            } catch (err) {
+                toast(err.message, 'error');
+                btn.disabled = false;
+                btn.textContent = 'Se connecter';
+            }
+        });
+    </script>
 </body>
-
 </html>

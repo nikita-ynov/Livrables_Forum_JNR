@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yo. - Admin Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles/main.css">
+    <link rel="stylesheet" href="../styles/admin.css">
+
+</head>
+<body>
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar__logo"><span class="logo-text">Y.</span></div>
+        <nav class="sidebar__nav">
+            <ul>
+                <li title="Home"><a href="../index.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg></a></li>
+                <li title="New post"><a href="./create.html" class="add-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg></a></li>
+                <li title="Profile"><a href="./profile.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></a></li>
+                <li title="Notifications" style="position:relative"><a href="./notifications.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg><span class="notif-dot"></span></a></li>
+                <li class="active" title="Admin"><a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></a></li>
+            </ul>
+        </nav>
+        <div class="sidebar__login"><a href="./login.html" class="login-btn">Log out</a></div>
+    </aside>
+
+    <main class="container admin-page">
+        <header class="admin-header">
+            <div>
+                <h1>Dashboard</h1>
+                <p>Administration de la plateforme</p>
+            </div>
+        </header>
+
+        <div class="admin-stats" id="adminStats">
+            <div class="stat-card"><span class="stat-card__label">TOPICS</span><span class="stat-card__value" id="statTopics">…</span></div>
+            <div class="stat-card"><span class="stat-card__label">MESSAGES</span><span class="stat-card__value" id="statMessages">…</span></div>
+            <div class="stat-card"><span class="stat-card__label">UTILISATEURS</span><span class="stat-card__value" id="statUsers">…</span></div>
+            <div class="stat-card"><span class="stat-card__label">BANNIS</span><span class="stat-card__value" id="statBanned">…</span></div>
+        </div>
+
+        <div class="admin-tabs">
+            <button class="admin-tab active" data-tab="topics">TOPICS</button>
+            <button class="admin-tab" data-tab="messages">MESSAGES</button>
+            <button class="admin-tab" data-tab="users">UTILISATEURS</button>
+        </div>
+
+        <div class="tab-panel active" id="tab-topics"><div class="yo-spinner"></div></div>
+        <div class="tab-panel" id="tab-messages"><div class="yo-spinner"></div></div>
+        <div class="tab-panel" id="tab-users"><div class="yo-spinner"></div></div>
+    </main>
+
+    <div class="confirm-overlay" id="confirmOverlay">
+        <div class="confirm-box">
+            <h3 id="confirmTitle">Confirmer</h3>
+            <p id="confirmText"></p>
+            <div class="confirm-actions">
+                <button class="ghost" onclick="closeConfirm()">Annuler</button>
+                <button id="confirmOkBtn" onclick="doConfirm()">Confirmer</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/api.js"></script>
+    <script>
+        requireAdmin();
+        initSidebar();
+
+        let pendingAction = null;
+
+        async function loadAll() {
+            await Promise.all([loadTopics(), loadUsers()]);
+        }
+
+        /* ── Topics ── */
+        async function loadTopics() {
+            const panel = document.getElementById('tab-topics');
+            try {
+                const data = await get('/topics?limit=all&userId=' + Session.id());
+                document.getElementById('statTopics').textContent = data.total;
+                if (!data.topics.length) { panel.innerHTML = '<div class="yo-empty">Aucun topic.</div>'; return; }
+                panel.innerHTML = `
+                    <table class="admin-table">
+                        <thead><tr><th>TITRE</th><th>AUTEUR</th><th>STATUT</th><th style="text-align:right">ACTIONS</th></tr></thead>
+                        <tbody>
+                        ${data.topics.map(t => `
+                            <tr data-id="${t.id}">
+                                <td style="max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escHtml(t.title)}</td>
+                                <td><div class="author-cell">${avatar(t.avatar_url, t.author, 26)}${escHtml(t.author)}</div></td>
+                                <td>
+                                    <select class="status-select" onchange="updateTopicState(${t.id}, this.value)">
+                                        <option value="open"     ${t.state==='open'     ? 'selected':''}>Ouvert</option>
+                                        <option value="closed"   ${t.state==='closed'   ? 'selected':''}>Fermé</option>
+                                        <option value="archived" ${t.state==='archived' ? 'selected':''}>Archivé</option>
+                                    </select>
+                                </td>
+                                <td><div class="col-actions">
+                                    <button class="action-sm action-sm--danger" onclick="confirmDeleteTopic(${t.id})">Supprimer</button>
+                                </div></td>
+                            </tr>`).join('')}
+                        </tbody>
+                    </table>`;
+
+                /* load messages count for all topics */
+                let totalMsgs = 0;
+                await Promise.all(data.topics.map(async t => {
+                    try {
+                        const m = await get(`/topics/${t.id}/messages?limit=1`);
+                        totalMsgs += m.total;
+                    } catch {}
+                }));
+                document.getElementById('statMessages').textContent = totalMsgs > 999 ? (totalMsgs/1000).toFixed(1)+'k' : totalMsgs;
+
+            } catch(err) { panel.innerHTML = `<div class="yo-empty">${err.message}</div>`; }
+        }
+
+        async function updateTopicState(id, state) {
+            try {
+                await patch('/topics/' + id, { state });
+                toast('Statut mis à jour', 'success');
+            } catch(err) { toast(err.message, 'error'); }
+        }
+
+        function confirmDeleteTopic(id) {
+            showConfirm('Supprimer ce topic ?', 'Cette action est irréversible. Tous les messages seront supprimés.', async () => {
+                await del('/topics/' + id);
+                document.querySelector(`tr[data-id="${id}"]`)?.remove();
+                toast('Topic supprimé', 'success');
+            }, 'danger');
+        }
+
+        /* ── Messages (loaded per-topic lazily) ── */
+        async function loadMessages() {
+            const panel = document.getElementById('tab-messages');
+            panel.innerHTML = '<div class="yo-spinner"></div>';
+            try {
+                const topicsData = await get('/topics?limit=all&userId=' + Session.id());
+                const allMessages = [];
+                await Promise.all(topicsData.topics.slice(0, 20).map(async t => {
+                    try {
+                        const m = await get(`/topics/${t.id}/messages?limit=30`);
+                        m.messages.forEach(msg => { msg._topicTitle = t.title; msg._topicId = t.id; allMessages.push(msg); });
+                    } catch {}
+                }));
+                allMessages.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+                if (!allMessages.length) { panel.innerHTML = '<div class="yo-empty">Aucun message.</div>'; return; }
+                panel.innerHTML = `
+                    <table class="admin-table">
+                        <thead><tr><th>MESSAGE</th><th>AUTEUR</th><th style="text-align:right">ACTIONS</th></tr></thead>
+                        <tbody>
+                        ${allMessages.map(m => `
+                            <tr data-msgid="${m.id}" data-topicid="${m._topicId}">
+                                <td style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--secondary)">${escHtml(m.body)}</td>
+                                <td><div class="author-cell">${avatar(m.avatar_url, m.author, 26)}${escHtml(m.author)}</div></td>
+                                <td><div class="col-actions">
+                                    <button class="action-sm action-sm--danger" onclick="confirmDeleteMsg(${m._topicId}, ${m.id})">Supprimer</button>
+                                </div></td>
+                            </tr>`).join('')}
+                        </tbody>
+                    </table>`;
+            } catch(err) { panel.innerHTML = `<div class="yo-empty">${err.message}</div>`; }
+        }
+
+        function confirmDeleteMsg(topicId, msgId) {
+            showConfirm('Supprimer ce message ?', 'Ce message sera définitivement supprimé.', async () => {
+                await del(`/topics/${topicId}/messages/${msgId}`);
+                document.querySelector(`tr[data-msgid="${msgId}"]`)?.remove();
+                toast('Message supprimé', 'success');
+            }, 'danger');
+        }
+
+        /* ── Users ── */
+        async function loadUsers() {
+            const panel = document.getElementById('tab-users');
+            try {
+                const users = await get('/admin/users');
+                document.getElementById('statUsers').textContent  = users.length;
+                document.getElementById('statBanned').textContent = users.filter(u => u.is_banned).length;
+                panel.innerHTML = `
+                    <table class="admin-table">
+                        <thead><tr><th>UTILISATEUR</th><th>RÔLE</th><th>STATUT</th><th style="text-align:right">ACTIONS</th></tr></thead>
+                        <tbody>
+                        ${users.map(u => `
+                            <tr data-uid="${u.id}">
+                                <td><div class="author-cell">${avatar(u.avatar_url, u.username, 28)}<div><span style="font-weight:600">${escHtml(u.username)}</span><span style="font-size:.72rem;color:var(--secondary);margin-left:.4rem">@${escHtml(u.username)}</span></div></div></td>
+                                <td style="font-size:.8rem;color:var(--secondary);text-transform:uppercase;letter-spacing:.04em">${u.role}</td>
+                                <td>${u.is_banned
+                                    ? `<span class="badge badge--banned"><svg viewBox="0 0 10 10"><circle cx="5" cy="5" r="5"/></svg>BANNI</span>`
+                                    : `<span class="badge badge--active"><svg viewBox="0 0 10 10"><circle cx="5" cy="5" r="5"/></svg>ACTIF</span>`
+                                }</td>
+                                <td><div class="col-actions">
+                                    ${u.id === Session.id() ? '<span style="font-size:.75rem;color:var(--secondary)">Vous</span>' :
+                                        u.is_banned
+                                        ? `<button class="action-sm action-sm--success" onclick="confirmUnban(${u.id})">Débannir</button>`
+                                        : `<button class="action-sm action-sm--warn" onclick="confirmBan(${u.id})">Bannir</button>`
+                                    }
+                                </div></td>
+                            </tr>`).join('')}
+                        </tbody>
+                    </table>`;
+            } catch(err) { panel.innerHTML = `<div class="yo-empty">${err.message}</div>`; }
+        }
+
+        function confirmBan(id) {
+            const row = document.querySelector(`tr[data-uid="${id}"]`);
+            const name = row?.querySelector('span[style*="font-weight"]')?.textContent || 'cet utilisateur';
+            showConfirm(`Bannir ${name} ?`, 'L\'utilisateur ne pourra plus se connecter.', async () => {
+                await patch(`/admin/users/${id}/ban`);
+                toast('Utilisateur banni', 'success');
+                loadUsers();
+            }, 'warn');
+        }
+
+        function confirmUnban(id) {
+            const row = document.querySelector(`tr[data-uid="${id}"]`);
+            const name = row?.querySelector('span[style*="font-weight"]')?.textContent || 'cet utilisateur';
+            showConfirm(`Débannir ${name} ?`, 'L\'utilisateur pourra à nouveau se connecter.', async () => {
+                await patch(`/admin/users/${id}/unban`);
+                toast('Utilisateur débanni', 'success');
+                loadUsers();
+            }, 'success');
+        }
+
+        /* ── Tabs ── */
+        let messagesLoaded = false;
+        document.querySelectorAll('.admin-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+                tab.classList.add('active');
+                document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
+                if (tab.dataset.tab === 'messages' && !messagesLoaded) {
+                    messagesLoaded = true;
+                    loadMessages();
+                }
+            });
+        });
+
+        /* ── Confirm modal ── */
+        function showConfirm(title, text, action, type = 'danger') {
+            pendingAction = action;
+            document.getElementById('confirmTitle').textContent = title;
+            document.getElementById('confirmText').textContent  = text;
+            const btn = document.getElementById('confirmOkBtn');
+            btn.style.background = type === 'success' ? '#2a9d5c' : type === 'warn' ? '#e07b2a' : '#c0392b';
+            document.getElementById('confirmOverlay').classList.add('show');
+        }
+        function closeConfirm() { document.getElementById('confirmOverlay').classList.remove('show'); pendingAction = null; }
+        async function doConfirm() {
+            if (!pendingAction) return;
+            try { await pendingAction(); } catch(err) { toast(err.message, 'error'); }
+            closeConfirm();
+        }
+        document.getElementById('confirmOverlay').addEventListener('click', e => { if (e.target === e.currentTarget) closeConfirm(); });
+
+        function escHtml(s) { return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+        loadAll();
+    </script>
+</body>
+</html>

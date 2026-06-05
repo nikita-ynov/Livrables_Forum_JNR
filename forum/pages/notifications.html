@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yo. - Notifications</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles/main.css">
+    <link rel="stylesheet" href="../styles/notifications.css">
+</head>
+<body>
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar__logo"><span class="logo-text">Y.</span></div>
+        <nav class="sidebar__nav">
+            <ul>
+                <li title="Home"><a href="../index.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg></a></li>
+                <li title="New post"><a href="./create.html" class="add-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg></a></li>
+                <li title="Profile"><a href="./profile.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></a></li>
+                <li class="active" title="Notifications"><a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg></a></li>
+                <li title="Admin"><a href="./admin.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></a></li>
+            </ul>
+        </nav>
+        <div class="sidebar__login"><a href="./login.html" class="login-btn">Log out</a></div>
+    </aside>
+
+    <main class="container notif-page">
+        <header class="notif-header">
+            <h1>Notifications</h1>
+            <button class="mark-all-btn" onclick="markAllRead()">Tout marquer comme lu</button>
+        </header>
+        <div class="notif-tabs">
+            <button class="notif-tab active" data-tab="all">TOUTES <span class="count-pill" id="allCount" style="display:none">0</span></button>
+            <button class="notif-tab" data-tab="friends">AMIS <span class="count-pill" id="friendsCount" style="display:none">0</span></button>
+            <button class="notif-tab" data-tab="activity">ACTIVITÉ <span class="count-pill" id="activityCount" style="display:none">0</span></button>
+        </div>
+        <div class="tab-panel active" id="tab-all"><div class="yo-spinner"></div></div>
+        <div class="tab-panel" id="tab-friends"></div>
+        <div class="tab-panel" id="tab-activity"></div>
+    </main>
+
+    <script src="../js/api.js"></script>
+    <script>
+        requireAuth();
+        initSidebar();
+
+        let allNotifs = [];
+
+        const ICONS = {
+            friend_request:  `<span class="notif-icon notif-icon--friend"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg></span>`,
+            friend_accepted: `<span class="notif-icon notif-icon--friend"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><polyline points="16 11 18 13 22 9"/></svg></span>`,
+            topic_reply:     `<span class="notif-icon notif-icon--reply"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></span>`,
+            message_liked:   `<span class="notif-icon notif-icon--like"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9V5a3 3 0 00-3-3l-4 9v11h11.28a2 2 0 002-1.7l1.38-9a2 2 0 00-2-2.3H14z"/></svg></span>`,
+        };
+
+        function notifText(n) {
+            const u = `<strong>${escHtml(n.from_username)}</strong>`;
+            switch(n.type) {
+                case 'friend_request':  return `${u} vous a envoyé une demande d'ami.`;
+                case 'friend_accepted': return `${u} a accepté votre demande d'ami.`;
+                case 'topic_reply':     return `${u} a répondu à votre topic <strong>${escHtml(n.topic_title||'')}</strong>.`;
+                case 'message_liked':   return `${u} a liké votre message dans <strong>${escHtml(n.topic_title||'')}</strong>.`;
+                default: return n.type;
+            }
+        }
+
+        function renderNotifItem(n) {
+            const isFriend = n.type.startsWith('friend');
+            const hasFriendActions = n.type === 'friend_request';
+            return `
+                <div class="notif-item ${n.is_read ? '' : 'unread'}" data-id="${n.id}" data-type="${isFriend ? 'friends' : 'activity'}">
+                    <div class="notif-avatar">
+                        ${avatar(n.from_avatar, n.from_username, 42)}
+                        ${ICONS[n.type] || ''}
+                    </div>
+                    <div class="notif-body">
+                        <p class="notif-text">${notifText(n)}</p>
+                        <span class="notif-time">${timeAgo(n.created_at).toUpperCase()}</span>
+                        ${hasFriendActions ? `
+                        <div class="friend-actions" id="freq-${n.id}">
+                            <button class="accept-btn" onclick="respondFriend(${n.from_user_id}, 'accepted', 'freq-${n.id}')">Accepter</button>
+                            <button class="decline-btn" onclick="respondFriend(${n.from_user_id}, 'refused', 'freq-${n.id}')">Refuser</button>
+                        </div>` : ''}
+                    </div>
+                </div>`;
+        }
+
+        async function loadNotifications() {
+            try {
+                const data = await get('/notifications/' + Session.id());
+                allNotifs  = data.notifications;
+                renderAll();
+                updateCounts();
+                await patch('/notifications/' + Session.id());
+            } catch { document.getElementById('tab-all').innerHTML = '<div class="yo-empty">Impossible de charger.</div>'; }
+        }
+
+        function renderAll() {
+            const friendNotifs   = allNotifs.filter(n => n.type.startsWith('friend'));
+            const activityNotifs = allNotifs.filter(n => !n.type.startsWith('friend'));
+
+            document.getElementById('tab-all').innerHTML      = allNotifs.length      ? allNotifs.map(renderNotifItem).join('')      : '<div class="yo-empty">Aucune notification.</div>';
+            document.getElementById('tab-friends').innerHTML  = friendNotifs.length   ? friendNotifs.map(renderNotifItem).join('')   : '<div class="yo-empty">Aucune notification.</div>';
+            document.getElementById('tab-activity').innerHTML = activityNotifs.length ? activityNotifs.map(renderNotifItem).join('') : '<div class="yo-empty">Aucune notification.</div>';
+        }
+
+        function updateCounts() {
+            const unreadAll      = allNotifs.filter(n => !n.is_read).length;
+            const unreadFriends  = allNotifs.filter(n => !n.is_read && n.type.startsWith('friend')).length;
+            const unreadActivity = allNotifs.filter(n => !n.is_read && !n.type.startsWith('friend')).length;
+            const set = (id, n) => { const el = document.getElementById(id); el.textContent = n; el.style.display = n > 0 ? '' : 'none'; };
+            set('allCount', unreadAll); set('friendsCount', unreadFriends); set('activityCount', unreadActivity);
+        }
+
+        async function markAllRead() {
+            try { await patch('/notifications/' + Session.id()); allNotifs.forEach(n => n.is_read = true); renderAll(); updateCounts(); }
+            catch(err) { toast(err.message, 'error'); }
+        }
+
+        async function respondFriend(fromUserId, state, boxId) {
+            try {
+                const friends = await get('/friends/' + Session.id());
+                const rel = friends.find(f => f.id == fromUserId && f.state === 'pending' && f.direction === 'received');
+                if (!rel) { toast('Demande introuvable', 'error'); return; }
+                await patch('/friends/' + rel.friendship_id, { state, user_id: Session.id() });
+                document.getElementById(boxId)?.remove();
+                toast(state === 'accepted' ? 'Ami ajouté !' : 'Demande refusée', state === 'accepted' ? 'success' : 'info');
+            } catch(err) { toast(err.message, 'error'); }
+        }
+
+        document.querySelectorAll('.notif-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.notif-tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+                tab.classList.add('active');
+                document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
+            });
+        });
+
+        function escHtml(s) { return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+        loadNotifications();
+    </script>
+</body>
+</html>

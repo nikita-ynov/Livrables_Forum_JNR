@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yo.</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./styles/main.css">
+    <link rel="stylesheet" href="./styles/home.css">
+</head>
+<body>
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar__logo"><span class="logo-text">Y.</span></div>
+        <nav class="sidebar__nav">
+            <ul>
+                <li class="active" title="Home"><a href="#">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg>
+                </a></li>
+                <li title="New post"><a href="./pages/create.html" class="add-btn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+                </a></li>
+                <li title="Profile"><a href="./pages/profile.html">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                </a></li>
+                <li title="Notifications" style="position:relative"><a href="./pages/notifications.html">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+                    <span class="notif-dot" style="position:absolute;top:8px;right:8px;width:7px;height:7px;background:#e0315a;border-radius:50%;border:2px solid var(--neutral);display:none"></span>
+                </a></li>
+                <li title="Admin"><a href="./pages/admin.html">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                </a></li>
+            </ul>
+        </nav>
+        <div class="sidebar__login"><a href="/pages/login.html" class="login-btn">Log in</a></div>
+    </aside>
+
+    <nav class="bottom-nav">
+        <a href="#" class="bottom-nav__item active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/></svg></a>
+        <a href="./pages/create.html" class="bottom-nav__item bottom-nav__add"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg></a>
+        <a href="./pages/profile.html" class="bottom-nav__item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></a>
+    </nav>
+
+    <main class="container home">
+        <header class="home__header"><h1>Home</h1></header>
+
+        <label class="search__container">
+            <svg class="search__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+            <input type="text" placeholder="Rechercher une conversation…" id="searchInput">
+        </label>
+
+        <div class="categorys" id="categoryBtns">
+            <button class="category active" data-cat="all">TOUS</button>
+        </div>
+
+        <div class="topic" id="topicList">
+            <div class="yo-spinner"></div>
+        </div>
+
+        <div class="pagination">
+            <span class="pagination__info" id="paginationInfo"></span>
+            <div class="pagination__controls">
+                <span class="per-page-label">PAR PAGE</span>
+                <select class="per-page-select" id="perPageSelect">
+                    <option value="10" selected>10</option>
+                    <option value="20">20</option>
+                    <option value="30">30</option>
+                    <option value="all">Tout</option>
+                </select>
+                <div id="pageNumbers" style="display:flex;gap:.4rem"></div>
+            </div>
+        </div>
+    </main>
+
+    <script src="./js/api.js"></script>
+    <script src="./js/script.js"></script>
+    <script>
+        /* Load tags dynamically for category buttons */
+        get('/tags').then(tags => {
+            const bar = document.getElementById('categoryBtns');
+            tags.forEach(t => {
+                const btn = document.createElement('button');
+                btn.className   = 'category';
+                btn.dataset.cat = t.name;
+                btn.textContent = t.name.toUpperCase();
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.category').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    currentTag  = t.name;
+                    currentPage = 1;
+                    loadTopics();
+                });
+                bar.appendChild(btn);
+            });
+        }).catch(() => {});
+    </script>
+</body>
+</html>

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yo. - Profil</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles/main.css">
+    <link rel="stylesheet" href="../styles/home.css">
+    <link rel="stylesheet" href="../styles/profile.css">
+</head>
+<body>
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar__logo"><span class="logo-text">Y.</span></div>
+        <nav class="sidebar__nav">
+            <ul>
+                <li title="Home"><a href="../index.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg></a></li>
+                <li title="New post"><a href="./create.html" class="add-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg></a></li>
+                <li class="active" title="Profile"><a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></a></li>
+                <li title="Notifications" style="position:relative"><a href="./notifications.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg><span class="notif-dot"></span></a></li>
+                <li title="Admin"><a href="./admin.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></a></li>
+            </ul>
+        </nav>
+        <div class="sidebar__login"><a href="#" class="login-btn">Log out</a></div>
+    </aside>
+
+    <main class="container profile-page">
+        <div id="profileContainer"><div class="yo-spinner"></div></div>
+    </main>
+
+    <div class="modal-overlay" id="editProfileModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Éditer le profil</h2>
+                <button class="close-btn" onclick="document.getElementById('editProfileModal').classList.remove('show')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+            </div>
+            <form id="editProfileForm" class="modal-form">
+                <div class="input-group">
+                    <label>BIO</label>
+                    <div class="search__container textarea-container">
+                        <textarea id="editBio" rows="4"></textarea>
+                    </div>
+                </div>
+                <button type="submit" class="modal-save-btn" id="saveProfileBtn">Enregistrer</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="../js/api.js"></script>
+    <script>
+        requireAuth();
+        initSidebar();
+
+        const uid = Session.id();
+        let profileData = null;
+        let friendsData = [];
+
+        async function loadProfile() {
+            try {
+                profileData = await get('/profile/' + uid);
+                friendsData = await get('/friends/' + uid);
+                renderProfile(profileData, friendsData);
+                loadTopics();
+            } catch { document.getElementById('profileContainer').innerHTML = '<div class="yo-empty">Erreur de chargement.</div>'; }
+        }
+
+        function renderProfile(p, friends) {
+            const accepted = friends.filter(f => f.state === 'accepted');
+            const pending  = friends.filter(f => f.state === 'pending' && f.direction === 'received');
+            document.getElementById('profileContainer').innerHTML = `
+                <header class="profile-header">
+                    <div class="profile-header__top">
+                        <div class="profile-avatar-wrap">${avatar(p.avatar_url, p.username, 72)}</div>
+                        <div class="profile-actions">
+                            <button class="ghost" onclick="openEditModal()">Éditer le profil</button>
+                        </div>
+                    </div>
+                    <div class="profile-info">
+                        <h1>${escHtml(p.username)}</h1>
+                        <span class="profile-handle">@${escHtml(p.username)}</span>
+                        <p class="profile-bio">${escHtml(p.bio || '')}</p>
+                        <div class="profile-meta-row">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                            Dernière connexion : <strong style="color:var(--primary)">${p.last_login ? timeAgo(p.last_login) : 'jamais'}</strong>
+                        </div>
+                        <div class="profile-stats">
+                            <div class="stat"><strong>${p.topic_count}</strong><span>Topics</span></div>
+                            <div class="stat"><strong>${p.message_count}</strong><span>Messages</span></div>
+                            <div class="stat"><strong>${accepted.length}</strong><span>Amis</span></div>
+                        </div>
+                    </div>
+                </header>
+                <div class="profile-tabs">
+                    <button class="tab active" onclick="showPanel('topics',this)">Conversations</button>
+                    <button class="tab" onclick="showPanel('friends',this)">Amis <span style="font-size:.75rem;color:var(--secondary);font-weight:500">(${accepted.length})</span></button>
+                </div>
+                <div id="panel-topics"><div class="yo-spinner"></div></div>
+                <div id="panel-friends" style="display:none">${renderFriendsPanel(accepted, pending)}</div>`;
+        }
+
+        function renderFriendsPanel(accepted, pending) {
+            let html = '';
+            if (pending.length) {
+                html += `<div class="pending-requests"><div class="pending-requests__title">DEMANDES REÇUES <span class="pill">${pending.length}</span></div>`;
+                html += pending.map(f => `
+                    <div class="pending-item" id="preq-${f.friendship_id}">
+                        <div class="pending-item__left">${avatar(f.avatar_url, f.username, 34)}<span class="pending-item__name">${escHtml(f.username)}</span></div>
+                        <div class="pending-item__actions">
+                            <button class="accept-sm" onclick="respondFriend(${f.friendship_id},'accepted','preq-${f.friendship_id}')">Accepter</button>
+                            <button class="decline-sm" onclick="respondFriend(${f.friendship_id},'refused','preq-${f.friendship_id}')">Refuser</button>
+                        </div>
+                    </div>`).join('');
+                html += '</div>';
+            }
+            if (!accepted.length) {
+                html += '<div class="yo-empty">Vous n\'avez pas encore d\'amis.</div>';
+                return html;
+            }
+            html += '<div class="friends-list">' + accepted.map(f => `
+                <div class="friend-item">
+                    <div class="friend-item__left" onclick="window.location.href='./user.html?id=${f.id}'">${avatar(f.avatar_url, f.username, 40)}<div><span class="friend-item__name">${escHtml(f.username)}</span><span class="friend-item__handle">@${escHtml(f.username)}</span></div></div>
+                    <button class="remove-friend-btn" onclick="removeFriend(${f.id},this)">Retirer</button>
+                </div>`).join('') + '</div>';
+            return html;
+        }
+
+        function showPanel(name, btn) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            btn.classList.add('active');
+            ['topics','friends'].forEach(p => {
+                const el = document.getElementById('panel-' + p);
+                if (el) el.style.display = p === name ? '' : 'none';
+            });
+        }
+
+        async function loadTopics() {
+            const panel = document.getElementById('panel-topics');
+            if (!panel) return;
+            try {
+                const data = await get(`/topics?userId=${uid}&limit=all`);
+                const myTopics = data.topics.filter(t => t.user_id === uid);
+                if (!myTopics.length) { panel.innerHTML = '<div class="yo-empty">Aucun topic créé.</div>'; return; }
+                panel.innerHTML = '<div class="topic">' + myTopics.map(t => `
+                    <article class="topic__msg">
+                        <div class="info">
+                            <div class="author"><div class="avatar-wrap">${avatar(t.avatar_url, t.author, 32)}</div><div class="author__meta"><span class="author__name">${escHtml(t.author)}</span><span class="author__tag">${(t.tags[0]||'GÉNÉRAL').toUpperCase()}</span></div></div>
+                            <div class="date">${timeAgo(t.created_at).toUpperCase()}</div>
+                        </div>
+                        <span class="topic-status topic-status--${t.state}"><svg viewBox="0 0 10 10"><circle cx="5" cy="5" r="5"/></svg>${t.state==='open'?'OUVERT':t.state==='closed'?'FERMÉ':'ARCHIVÉ'}</span>
+                        <div class="message" onclick="window.location.href='./post.html?id=${t.id}'" style="cursor:pointer"><h2>${escHtml(t.title)}</h2><p>${escHtml((t.body||'').substring(0,150))}…</p></div>
+                    </article>`).join('') + '</div>';
+            } catch { panel.innerHTML = '<div class="yo-empty">Impossible de charger les topics.</div>'; }
+        }
+
+        async function respondFriend(id, state, rowId) {
+            try {
+                await patch('/friends/' + id, { state, user_id: uid });
+                document.getElementById(rowId)?.remove();
+                toast(state === 'accepted' ? 'Ami ajouté !' : 'Demande refusée', state === 'accepted' ? 'success' : 'info');
+                loadProfile();
+            } catch (err) { toast(err.message, 'error'); }
+        }
+
+        async function removeFriend(targetId, btn) {
+            if (!confirm('Retirer cet ami ?')) return;
+            try {
+                await del(`/friends/${uid}/${targetId}`);
+                btn.closest('.friend-item').remove();
+                toast('Ami retiré', 'info');
+            } catch (err) { toast(err.message, 'error'); }
+        }
+
+        function openEditModal() {
+            document.getElementById('editBio').value = profileData?.bio || '';
+            document.getElementById('editProfileModal').classList.add('show');
+        }
+
+        document.getElementById('editProfileForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('saveProfileBtn');
+            btn.disabled = true; btn.textContent = 'Enregistrement…';
+            try {
+                await patch('/profile/' + uid, { bio: document.getElementById('editBio').value });
+                toast('Profil mis à jour', 'success');
+                document.getElementById('editProfileModal').classList.remove('show');
+                loadProfile();
+            } catch (err) { toast(err.message, 'error'); }
+            finally { btn.disabled = false; btn.textContent = 'Enregistrer'; }
+        });
+
+        function escHtml(s) { return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+        loadProfile();
+    </script>
+</body>
+</html>

@@ -505,3 +505,53 @@ input::placeholder {
         display: none;
     }
 }
+/* ── Toast ─────────────────────────────────────────── */
+.yo-toast {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(1rem);
+    background: var(--primary);
+    color: var(--neutral);
+    padding: .7rem 1.4rem;
+    border-radius: var(--radius-full);
+    font-size: .85rem;
+    font-weight: 600;
+    z-index: 9999;
+    opacity: 0;
+    transition: opacity .25s, transform .25s;
+    white-space: nowrap;
+    pointer-events: none;
+    max-width: 90vw;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+.yo-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+.yo-toast--error   { background: #c0392b; }
+.yo-toast--success { background: #2a9d5c; }
+.yo-toast--info    { background: var(--primary); }
+
+/* ── Spinner ────────────────────────────────────────── */
+.yo-spinner {
+    display: flex;
+    justify-content: center;
+    padding: 3rem 0;
+}
+.yo-spinner::after {
+    content: '';
+    width: 28px;
+    height: 28px;
+    border: 2.5px solid var(--border);
+    border-top-color: var(--primary);
+    border-radius: 50%;
+    animation: spin .7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── Empty state ────────────────────────────────────── */
+.yo-empty {
+    text-align: center;
+    padding: 3rem 0;
+    color: var(--secondary);
+    font-size: .95rem;
+}

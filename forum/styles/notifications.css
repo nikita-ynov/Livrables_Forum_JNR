@@ -1,0 +1,249 @@
+ .notif-page {
+     padding-top: 2rem;
+     padding-bottom: 5rem;
+     animation: fadeUp .4s ease both
+ }
+
+ @keyframes fadeUp {
+     from {
+         opacity: 0;
+         transform: translateY(10px)
+     }
+
+     to {
+         opacity: 1;
+         transform: translateY(0)
+     }
+ }
+
+ .notif-header {
+     padding-bottom: 1.5rem;
+     border-bottom: 1px solid var(--border);
+     margin-bottom: 0;
+     display: flex;
+     align-items: center;
+     justify-content: space-between
+ }
+
+ .notif-header h1 {
+     font-size: 2rem
+ }
+
+ .mark-all-btn {
+     background: transparent;
+     color: var(--secondary);
+     border: 1.5px solid var(--border);
+     font-size: .75rem;
+     padding: .4rem .9rem
+ }
+
+ .mark-all-btn:hover {
+     border-color: var(--primary);
+     color: var(--primary);
+     opacity: 1
+ }
+
+ .notif-tabs {
+     display: flex;
+     gap: 2rem;
+     border-bottom: 1px solid var(--border);
+     margin-bottom: 0
+ }
+
+ .notif-tab {
+     background: transparent;
+     border: none;
+     padding: .9rem 0 .8rem;
+     color: var(--secondary);
+     font-size: .82rem;
+     font-weight: 600;
+     border-radius: 0;
+     border-bottom: 2px solid transparent;
+     cursor: pointer;
+     transition: all .15s;
+     letter-spacing: .04em;
+     display: flex;
+     align-items: center;
+     gap: .4rem
+ }
+
+ .notif-tab:hover {
+     color: var(--primary);
+     opacity: 1
+ }
+
+ .notif-tab.active {
+     color: var(--primary);
+     border-bottom-color: var(--primary)
+ }
+
+ .count-pill {
+     background: var(--primary);
+     color: var(--neutral);
+     font-size: .65rem;
+     font-weight: 700;
+     padding: .1rem .4rem;
+     border-radius: var(--radius-full);
+     line-height: 1.4
+ }
+
+ .tab-panel {
+     display: none
+ }
+
+ .tab-panel.active {
+     display: block
+ }
+
+ .notif-list {
+     display: flex;
+     flex-direction: column
+ }
+
+ .notif-item {
+     display: flex;
+     align-items: flex-start;
+     gap: 1rem;
+     padding: 1.2rem 0;
+     border-bottom: 1px solid var(--border);
+     position: relative;
+     cursor: pointer
+ }
+
+ .notif-item:last-child {
+     border-bottom: none
+ }
+
+ .notif-item.unread::before {
+     content: '';
+     position: absolute;
+     left: -1.5rem;
+     top: 50%;
+     transform: translateY(-50%);
+     width: 7px;
+     height: 7px;
+     background: #e0315a;
+     border-radius: 50%
+ }
+
+ .notif-avatar {
+     position: relative;
+     flex-shrink: 0
+ }
+
+ .notif-icon {
+     position: absolute;
+     bottom: -2px;
+     right: -4px;
+     width: 18px;
+     height: 18px;
+     border-radius: 50%;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     border: 2px solid var(--neutral)
+ }
+
+ .notif-icon svg {
+     width: 9px;
+     height: 9px
+ }
+
+ .notif-icon--friend {
+     background: #4f46e5
+ }
+
+ .notif-icon--friend svg {
+     stroke: #fff
+ }
+
+ .notif-icon--reply {
+     background: #0891b2
+ }
+
+ .notif-icon--reply svg {
+     stroke: #fff
+ }
+
+ .notif-icon--like {
+     background: #e0315a
+ }
+
+ .notif-icon--like svg {
+     stroke: #fff
+ }
+
+ .notif-body {
+     flex-grow: 1
+ }
+
+ .notif-text {
+     font-size: .88rem;
+     color: var(--secondary);
+     line-height: 1.5;
+     margin-bottom: .25rem
+ }
+
+ .notif-text strong {
+     font-weight: 600;
+     color: var(--primary)
+ }
+
+ .notif-time {
+     font-size: .72rem;
+     font-weight: 500;
+     letter-spacing: .04em;
+     color: var(--secondary)
+ }
+
+ .friend-actions {
+     display: flex;
+     gap: .5rem;
+     margin-top: .6rem
+ }
+
+ .accept-btn {
+     background: var(--primary);
+     color: var(--neutral);
+     border: none;
+     padding: .35rem .9rem;
+     font-size: .75rem;
+     border-radius: var(--radius-full);
+     cursor: pointer;
+     font-weight: 600;
+     transition: opacity .15s
+ }
+
+ .accept-btn:hover {
+     opacity: .8
+ }
+
+ .decline-btn {
+     background: transparent;
+     color: var(--secondary);
+     border: 1.5px solid var(--border);
+     padding: .35rem .9rem;
+     font-size: .75rem;
+     border-radius: var(--radius-full);
+     cursor: pointer;
+     font-weight: 600;
+     transition: all .15s
+ }
+
+ .decline-btn:hover {
+     border-color: #c0392b;
+     color: #c0392b;
+     opacity: 1
+ }
+
+ .notif-dot {
+     position: absolute;
+     top: 8px;
+     right: 8px;
+     width: 7px;
+     height: 7px;
+     background: #e0315a;
+     border-radius: 50%;
+     border: 2px solid var(--neutral);
+     display: none
+ }

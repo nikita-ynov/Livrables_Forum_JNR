@@ -1,6 +1,5 @@
-
 .auth-page {
-    margin: auto; 
+    margin: auto;
     width: 100%;
     max-width: 440px;
     padding: 3rem 1.5rem;
@@ -106,7 +105,51 @@
     .auth-page {
         padding: 2rem 1rem;
     }
+
     .auth-header h1 {
         font-size: 1.5rem;
     }
+}
+
+.password-rules {
+    display: flex;
+    flex-direction: column;
+    gap: .35rem;
+    padding: .75rem 1rem;
+    background: var(--tertiary);
+    border-radius: var(--radius-md);
+    margin-top: -.4rem
+}
+
+.password-rule {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    font-size: .75rem;
+    color: var(--secondary);
+    font-weight: 500;
+    transition: color .2s
+}
+
+.password-rule svg {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+    stroke: var(--secondary);
+    transition: stroke .2s
+}
+
+.password-rule.valid {
+    color: #2a9d5c
+}
+
+.password-rule.valid svg {
+    stroke: #2a9d5c
+}
+
+.username-hint {
+    font-size: .72rem;
+    color: var(--secondary);
+    padding: 0 .2rem;
+    margin-top: -.3rem
 }

@@ -1,0 +1,78 @@
+      .profile-meta-row {
+          display: flex;
+          align-items: center;
+          gap: .5rem;
+          font-size: .8rem;
+          color: var(--secondary);
+          margin-bottom: .5rem
+      }
+
+      .profile-meta-row svg {
+          width: 14px;
+          height: 14px;
+          stroke: var(--secondary);
+          flex-shrink: 0
+      }
+
+      .friend-btn {
+          display: inline-flex;
+          align-items: center;
+          gap: .45rem
+      }
+
+      .friend-btn svg {
+          width: 15px;
+          height: 15px
+      }
+
+      .friend-btn.pending {
+          background: transparent;
+          color: var(--secondary);
+          border: 1.5px solid var(--border)
+      }
+
+      .friend-btn.friends {
+          background: #e8f5ee;
+          color: #2a9d5c;
+          border: 1.5px solid #b8dfc9
+      }
+
+      .topic-status {
+          display: inline-flex;
+          align-items: center;
+          gap: .3rem;
+          font-size: .65rem;
+          font-weight: 600;
+          letter-spacing: .06em;
+          padding: .18rem .55rem;
+          border-radius: var(--radius-full);
+          margin-bottom: .5rem
+      }
+
+      .topic-status svg {
+          width: 7px;
+          height: 7px;
+          fill: currentColor
+      }
+
+      .topic-status--open {
+          background: #e8f5ee;
+          color: #2a9d5c
+      }
+
+      .topic-status--closed {
+          background: #fef0e7;
+          color: #e07b2a
+      }
+
+      .notif-dot {
+          position: absolute;
+          top: 8px;
+          right: 8px;
+          width: 7px;
+          height: 7px;
+          background: #e0315a;
+          border-radius: 50%;
+          border: 2px solid var(--neutral);
+          display: none
+      }

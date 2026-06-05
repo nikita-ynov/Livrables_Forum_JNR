@@ -1,28 +1,27 @@
-const express = require('express');
-const connexion = require('./DB/db.js');
-const router = require('./router/router.js');
-const path = require('path');
+require('dotenv').config();
 
-const app = express();
+const express = require('express');
+const cors    = require('cors');
+const path    = require('path');
+const router  = require('./router/router.js');
+
+const app  = express();
 const port = process.env.PORT || 8080;
 
+app.use(cors({ origin: '*', credentials: true }));
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-app.use('/assets', express.static(path.join(__dirname, 'assets')));
-app.use(express.static(path.join(__dirname, '..', 'Frontend')));
+const frontendPath = path.join(__dirname, '..', 'forum');
+app.use(express.static(frontendPath));
+
 app.use('/api', router);
 
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'Frontend', 'index.html'));
+app.get('*', (req, res) => {
+    res.sendFile(path.join(frontendPath, 'index.html'));
 });
 
-connexion.connect((err) => {
-    if(err) {
-        console.log('Erreur de connexion : '+ err);
-    } else {
-        console.log('Connexion à la BDD réussie');
-    }
-})
-
-
-app.listen(port, () => console.log(`Serveur lancé sur le port ${port}`));
+app.listen(port, () => {
+    console.log(`✓ Serveur lancé sur http://localhost:${port}`);
+    console.log(`✓ Frontend servi depuis ${frontendPath}`);
+});

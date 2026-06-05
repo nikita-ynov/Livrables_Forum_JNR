@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yo. - Topic</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles/main.css">
+    <link rel="stylesheet" href="../styles/home.css">
+    <link rel="stylesheet" href="../styles/post.css">
+</head>
+<body>
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar__logo"><span class="logo-text">Y.</span></div>
+        <nav class="sidebar__nav">
+            <ul>
+                <li title="Home"><a href="../index.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg></a></li>
+                <li title="New post"><a href="./create.html" class="add-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg></a></li>
+                <li title="Profile"><a href="./profile.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></a></li>
+                <li title="Notifications" style="position:relative"><a href="./notifications.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg><span class="notif-dot" style="position:absolute;top:8px;right:8px;width:7px;height:7px;background:#e0315a;border-radius:50%;border:2px solid var(--neutral);display:none"></span></a></li>
+                <li title="Admin"><a href="./admin.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></a></li>
+            </ul>
+        </nav>
+        <div class="sidebar__login"><a href="./login.html" class="login-btn">Log out</a></div>
+    </aside>
+
+    <main class="container post-page">
+        <a href="../index.html" class="ghost back-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+            Retour
+        </a>
+
+        <div id="topicContainer"><div class="yo-spinner"></div></div>
+
+        <section class="comments-section" id="commentsSection" style="display:none">
+            <div class="sort-bar">
+                <h3 class="comments-count" id="commentsCount">0 Réponses</h3>
+                <div class="sort-options">
+                    <button class="sort-btn active" data-sort="recent">Récents</button>
+                    <button class="sort-btn" data-sort="popular">Populaires</button>
+                </div>
+            </div>
+
+            <div id="replyFormContainer"></div>
+
+            <div class="pagination" style="padding-top:0;padding-bottom:1.5rem">
+                <span class="pagination__info" id="msgPaginationInfo"></span>
+                <div class="pagination__controls">
+                    <span style="font-size:.72rem;font-weight:600;letter-spacing:.06em;color:var(--secondary)">PAR PAGE</span>
+                    <select class="per-page-select" id="msgPerPage">
+                        <option value="10" selected>10</option>
+                        <option value="20">20</option>
+                        <option value="30">30</option>
+                        <option value="all">Tout</option>
+                    </select>
+                    <div id="msgPageNumbers" style="display:flex;gap:.4rem"></div>
+                </div>
+            </div>
+
+            <div id="messagesList"><div class="yo-spinner"></div></div>
+        </section>
+    </main>
+
+    <script src="../js/api.js"></script>
+    <script>
+        initSidebar();
+
+        const params  = new URLSearchParams(location.search);
+        const topicId = params.get('id');
+        if (!topicId) window.location.href = '/index.html';
+
+        let currentSort  = 'recent';
+        let currentPage  = 1;
+        let currentLimit = 10;
+        let topicData    = null;
+
+        async function loadTopic() {
+            try {
+                topicData = await get('/topics/' + topicId);
+                renderTopic(topicData);
+                document.title = 'Yo. - ' + topicData.title;
+                document.getElementById('commentsSection').style.display = '';
+                loadMessages();
+            } catch {
+                document.getElementById('topicContainer').innerHTML = '<div class="yo-empty">Topic introuvable.</div>';
+            }
+        }
+
+        function renderTopic(t) {
+            const isOwner = Session.id() === t.user_id;
+            const isAdmin = Session.isAdmin();
+            document.getElementById('topicContainer').innerHTML = `
+                <article class="topic__msg main-post">
+                    <div class="info">
+                        <div class="author" onclick="window.location.href='./user.html?id=${t.user_id}'" style="cursor:pointer">
+                            <div class="avatar-wrap">${avatar(t.avatar_url, t.author, 36)}</div>
+                            <div class="author__meta">
+                                <span class="author__name">${escHtml(t.author)}</span>
+                                <span class="author__tag">${(t.tags[0] || 'GÉNÉRAL').toUpperCase()}</span>
+                            </div>
+                        </div>
+                        <div class="date">${timeAgo(t.created_at).toUpperCase()}</div>
+                    </div>
+                    ${statusBadge(t.state)}
+                    <div class="message">
+                        <h2>${escHtml(t.title)}</h2>
+                        <p>${escHtml(t.body)}</p>
+                    </div>
+                    <div class="actions">
+                        <button class="action-btn action-btn--share" onclick="navigator.clipboard.writeText(location.href);toast('Lien copié !','success')">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+                        </button>
+                        ${(isOwner || isAdmin) ? `
+                        <button class="action-btn action-btn--share" onclick="deleteTopic()" title="Supprimer">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg>
+                        </button>` : ''}
+                    </div>
+                </article>`;
+        }
+
+        async function loadMessages() {
+            const list = document.getElementById('messagesList');
+            list.innerHTML = '<div class="yo-spinner"></div>';
+
+            const p = new URLSearchParams({ page: currentPage, limit: currentLimit, sort: currentSort });
+            try {
+                const data = await get(`/topics/${topicId}/messages?` + p);
+                const total = data.total;
+                document.getElementById('commentsCount').textContent = `${total} Réponse${total > 1 ? 's' : ''}`;
+
+                const from = total === 0 ? 0 : (currentPage - 1) * (currentLimit >= 10000 ? total : currentLimit) + 1;
+                const to   = Math.min(currentPage * (currentLimit >= 10000 ? total : currentLimit), total);
+                document.getElementById('msgPaginationInfo').textContent = `Affichage ${from}–${to} sur ${total}`;
+
+                const nums = document.getElementById('msgPageNumbers');
+                nums.innerHTML = '';
+                const pages = Math.ceil(total / (currentLimit >= 10000 ? total : currentLimit)) || 1;
+                for (let i = 1; i <= Math.min(pages, 7); i++) {
+                    const btn = document.createElement('button');
+                    btn.className   = 'page-btn' + (i === currentPage ? ' active' : '');
+                    btn.textContent = i;
+                    btn.onclick     = () => { currentPage = i; loadMessages(); };
+                    nums.appendChild(btn);
+                }
+
+                renderMessages(data.messages);
+                renderReplyForm(topicData);
+            } catch {
+                list.innerHTML = '<div class="yo-empty">Impossible de charger les messages.</div>';
+            }
+        }
+
+        function renderMessages(messages) {
+            const list = document.getElementById('messagesList');
+            if (!messages.length) {
+                list.innerHTML = '<div class="yo-empty">Soyez le premier à répondre.</div>';
+                return;
+            }
+            const uid      = Session.id();
+            const isAdmin  = Session.isAdmin();
+            list.innerHTML = messages.map(m => {
+                const isOwner = uid === m.user_id || isAdmin || (topicData && uid === topicData.user_id);
+                return `
+                <article class="comment" data-id="${m.id}">
+                    <div class="avatar-wrap">${avatar(m.avatar_url, m.author, 32)}</div>
+                    <div class="comment-content">
+                        <div class="comment-header">
+                            <span class="comment-author" onclick="window.location.href='./user.html?id=${m.user_id}'" style="cursor:pointer">${escHtml(m.author)}</span>
+                            <span class="date">${timeAgo(m.created_at).toUpperCase()}</span>
+                        </div>
+                        <p class="comment-text">${escHtml(m.body)}</p>
+                        <div class="comment-actions">
+                            <button class="action-btn like-btn" data-id="${m.id}" data-likes="${m.likes || 0}">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9V5a3 3 0 00-3-3l-4 9v11h11.28a2 2 0 002-1.7l1.38-9a2 2 0 00-2-2.3H14z"/><path d="M7 22H4a2 2 0 01-2-2v-7a2 2 0 012-2h3"/></svg>
+                                <span>${m.likes || 0}</span>
+                            </button>
+                            <button class="action-btn dislike-btn" data-id="${m.id}" data-dislikes="${m.dislikes || 0}">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 15v4a3 3 0 003 3l4-9V2H5.72a2 2 0 00-2 1.7l-1.38 9a2 2 0 002 2.3H10z"/><path d="M17 2h2.67A2.31 2.31 0 0122 4v7a2.31 2.31 0 01-2.33 2H17"/></svg>
+                                <span>${m.dislikes || 0}</span>
+                            </button>
+                            <span class="action-btn" style="cursor:default;font-size:.75rem;font-weight:600" class="${(m.score||0)>=0?'score-positive':'score-negative'}">
+                                ${(m.score||0) >= 0 ? '+' : ''}${m.score || 0}
+                            </span>
+                            ${isOwner ? `
+                            <button class="action-btn action-btn--share" onclick="deleteMsg(${m.id}, this)" title="Supprimer">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg>
+                            </button>` : ''}
+                        </div>
+                    </div>
+                </article>`;
+            }).join('');
+
+            initVoteButtons();
+        }
+
+        function renderReplyForm(t) {
+            const container = document.getElementById('replyFormContainer');
+            if (!Session.isLoggedIn() || t.state !== 'open') {
+                container.innerHTML = t.state !== 'open'
+                    ? `<div class="closed-notice">Ce topic est ${t.state === 'closed' ? 'fermé' : 'archivé'} — les réponses sont désactivées.</div>`
+                    : `<div class="closed-notice">Connectez-vous pour répondre. <a href="./login.html">Se connecter</a></div>`;
+                return;
+            }
+            container.innerHTML = `
+                <form class="comment-form" id="replyForm">
+                    <div class="avatar-wrap">${avatar(null, Session.username(), 32)}</div>
+                    <div class="search__container comment-input-wrap">
+                        <textarea id="replyBody" placeholder="Ajouter une réponse..." rows="2" required></textarea>
+                        <div class="comment-form-actions">
+                            <button type="submit" class="reply-btn" id="replyBtn">Répondre</button>
+                        </div>
+                    </div>
+                </form>`;
+
+            document.getElementById('replyForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const body = document.getElementById('replyBody').value.trim();
+                if (!body) return;
+                const btn = document.getElementById('replyBtn');
+                btn.disabled = true; btn.textContent = '…';
+                try {
+                    await post(`/topics/${topicId}/messages`, { user_id: Session.id(), body });
+                    document.getElementById('replyBody').value = '';
+                    currentPage = 1;
+                    loadMessages();
+                } catch (err) {
+                    toast(err.message, 'error');
+                } finally {
+                    btn.disabled = false; btn.textContent = 'Répondre';
+                }
+            });
+        }
+
+        function initVoteButtons() {
+            document.querySelectorAll('.like-btn[data-id]').forEach(btn => {
+                btn.addEventListener('click', () => castVote(btn, 'liked'));
+            });
+            document.querySelectorAll('.dislike-btn[data-id]').forEach(btn => {
+                btn.addEventListener('click', () => castVote(btn, 'disliked'));
+            });
+        }
+
+        async function castVote(btn, type) {
+            if (!Session.isLoggedIn()) { toast('Connectez-vous pour voter', 'error'); return; }
+            const msgId = btn.dataset.id;
+            try {
+                await post(`/messages/${msgId}/vote`, { user_id: Session.id(), type });
+                loadMessages();
+            } catch (err) { toast(err.message, 'error'); }
+        }
+
+        async function deleteMsg(msgId, btn) {
+            if (!confirm('Supprimer ce message ?')) return;
+            try {
+                await del(`/topics/${topicId}/messages/${msgId}`);
+                btn.closest('.comment').remove();
+                toast('Message supprimé', 'success');
+            } catch (err) { toast(err.message, 'error'); }
+        }
+
+        async function deleteTopic() {
+            if (!confirm('Supprimer ce topic et tous ses messages ?')) return;
+            try {
+                await del('/topics/' + topicId);
+                toast('Topic supprimé', 'success');
+                setTimeout(() => window.location.href = '/index.html', 600);
+            } catch (err) { toast(err.message, 'error'); }
+        }
+
+        document.querySelectorAll('.sort-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.sort-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentSort = btn.dataset.sort;
+                currentPage = 1;
+                loadMessages();
+            });
+        });
+
+        document.getElementById('msgPerPage').addEventListener('change', (e) => {
+            currentLimit = e.target.value === 'all' ? 10000 : parseInt(e.target.value);
+            currentPage  = 1;
+            loadMessages();
+        });
+
+        function escHtml(s) { return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+        loadTopic();
+    </script>
+</body>
+</html>
