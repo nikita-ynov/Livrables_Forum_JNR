@@ -1,26 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Yo. - Admin Dashboard</title>
+    <link rel="icon" type="image/x-icon" href="./assets/icon.ico">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="../styles/main.css">
     <link rel="stylesheet" href="../styles/admin.css">
 
 </head>
+
 <body>
     <aside class="sidebar" id="sidebar">
         <div class="sidebar__logo"><span class="logo-text">Y.</span></div>
         <nav class="sidebar__nav">
             <ul>
-                <li title="Home"><a href="../index.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg></a></li>
-                <li title="New post"><a href="./create.html" class="add-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg></a></li>
-                <li title="Profile"><a href="./profile.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></a></li>
-                <li title="Notifications" style="position:relative"><a href="./notifications.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg><span class="notif-dot"></span></a></li>
-                <li class="active" title="Admin"><a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></a></li>
+                <li title="Home"><a href="../index.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z" />
+                            <path d="M9 21V12h6v9" />
+                        </svg></a></li>
+                <li title="New post"><a href="./create.html" class="add-btn"><svg viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 5v14M5 12h14" />
+                        </svg></a></li>
+                <li title="Profile"><a href="./profile.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+                            <circle cx="12" cy="7" r="4" />
+                        </svg></a></li>
+                <li title="Notifications" style="position:relative"><a href="./notifications.html"><svg
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9" />
+                            <path d="M13.73 21a2 2 0 01-3.46 0" />
+                        </svg><span class="notif-dot"></span></a></li>
+                <li class="active" title="Admin"><a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <path
+                                d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                        </svg></a></li>
             </ul>
         </nav>
         <div class="sidebar__login"><a href="./login.html" class="login-btn">Log out</a></div>
@@ -35,10 +61,14 @@
         </header>
 
         <div class="admin-stats" id="adminStats">
-            <div class="stat-card"><span class="stat-card__label">TOPICS</span><span class="stat-card__value" id="statTopics">…</span></div>
-            <div class="stat-card"><span class="stat-card__label">MESSAGES</span><span class="stat-card__value" id="statMessages">…</span></div>
-            <div class="stat-card"><span class="stat-card__label">UTILISATEURS</span><span class="stat-card__value" id="statUsers">…</span></div>
-            <div class="stat-card"><span class="stat-card__label">BANNIS</span><span class="stat-card__value" id="statBanned">…</span></div>
+            <div class="stat-card"><span class="stat-card__label">TOPICS</span><span class="stat-card__value"
+                    id="statTopics">…</span></div>
+            <div class="stat-card"><span class="stat-card__label">MESSAGES</span><span class="stat-card__value"
+                    id="statMessages">…</span></div>
+            <div class="stat-card"><span class="stat-card__label">UTILISATEURS</span><span class="stat-card__value"
+                    id="statUsers">…</span></div>
+            <div class="stat-card"><span class="stat-card__label">BANNIS</span><span class="stat-card__value"
+                    id="statBanned">…</span></div>
         </div>
 
         <div class="admin-tabs">
@@ -47,9 +77,15 @@
             <button class="admin-tab" data-tab="users">UTILISATEURS</button>
         </div>
 
-        <div class="tab-panel active" id="tab-topics"><div class="yo-spinner"></div></div>
-        <div class="tab-panel" id="tab-messages"><div class="yo-spinner"></div></div>
-        <div class="tab-panel" id="tab-users"><div class="yo-spinner"></div></div>
+        <div class="tab-panel active" id="tab-topics">
+            <div class="yo-spinner"></div>
+        </div>
+        <div class="tab-panel" id="tab-messages">
+            <div class="yo-spinner"></div>
+        </div>
+        <div class="tab-panel" id="tab-users">
+            <div class="yo-spinner"></div>
+        </div>
     </main>
 
     <div class="confirm-overlay" id="confirmOverlay">
@@ -91,9 +127,9 @@
                                 <td><div class="author-cell">${avatar(t.avatar_url, t.author, 26)}${escHtml(t.author)}</div></td>
                                 <td>
                                     <select class="status-select" onchange="updateTopicState(${t.id}, this.value)">
-                                        <option value="open"     ${t.state==='open'     ? 'selected':''}>Ouvert</option>
-                                        <option value="closed"   ${t.state==='closed'   ? 'selected':''}>Fermé</option>
-                                        <option value="archived" ${t.state==='archived' ? 'selected':''}>Archivé</option>
+                                        <option value="open"     ${t.state === 'open' ? 'selected' : ''}>Ouvert</option>
+                                        <option value="closed"   ${t.state === 'closed' ? 'selected' : ''}>Fermé</option>
+                                        <option value="archived" ${t.state === 'archived' ? 'selected' : ''}>Archivé</option>
                                     </select>
                                 </td>
                                 <td><div class="col-actions">
@@ -109,18 +145,18 @@
                     try {
                         const m = await get(`/topics/${t.id}/messages?limit=1`);
                         totalMsgs += m.total;
-                    } catch {}
+                    } catch { }
                 }));
-                document.getElementById('statMessages').textContent = totalMsgs > 999 ? (totalMsgs/1000).toFixed(1)+'k' : totalMsgs;
+                document.getElementById('statMessages').textContent = totalMsgs > 999 ? (totalMsgs / 1000).toFixed(1) + 'k' : totalMsgs;
 
-            } catch(err) { panel.innerHTML = `<div class="yo-empty">${err.message}</div>`; }
+            } catch (err) { panel.innerHTML = `<div class="yo-empty">${err.message}</div>`; }
         }
 
         async function updateTopicState(id, state) {
             try {
                 await patch('/topics/' + id, { state });
                 toast('Statut mis à jour', 'success');
-            } catch(err) { toast(err.message, 'error'); }
+            } catch (err) { toast(err.message, 'error'); }
         }
 
         function confirmDeleteTopic(id) {
@@ -142,7 +178,7 @@
                     try {
                         const m = await get(`/topics/${t.id}/messages?limit=30`);
                         m.messages.forEach(msg => { msg._topicTitle = t.title; msg._topicId = t.id; allMessages.push(msg); });
-                    } catch {}
+                    } catch { }
                 }));
                 allMessages.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
                 if (!allMessages.length) { panel.innerHTML = '<div class="yo-empty">Aucun message.</div>'; return; }
@@ -160,7 +196,7 @@
                             </tr>`).join('')}
                         </tbody>
                     </table>`;
-            } catch(err) { panel.innerHTML = `<div class="yo-empty">${err.message}</div>`; }
+            } catch (err) { panel.innerHTML = `<div class="yo-empty">${err.message}</div>`; }
         }
 
         function confirmDeleteMsg(topicId, msgId) {
@@ -176,7 +212,7 @@
             const panel = document.getElementById('tab-users');
             try {
                 const users = await get('/admin/users');
-                document.getElementById('statUsers').textContent  = users.length;
+                document.getElementById('statUsers').textContent = users.length;
                 document.getElementById('statBanned').textContent = users.filter(u => u.is_banned).length;
                 panel.innerHTML = `
                     <table class="admin-table">
@@ -187,20 +223,20 @@
                                 <td><div class="author-cell">${avatar(u.avatar_url, u.username, 28)}<div><span style="font-weight:600">${escHtml(u.username)}</span><span style="font-size:.72rem;color:var(--secondary);margin-left:.4rem">@${escHtml(u.username)}</span></div></div></td>
                                 <td style="font-size:.8rem;color:var(--secondary);text-transform:uppercase;letter-spacing:.04em">${u.role}</td>
                                 <td>${u.is_banned
-                                    ? `<span class="badge badge--banned"><svg viewBox="0 0 10 10"><circle cx="5" cy="5" r="5"/></svg>BANNI</span>`
-                                    : `<span class="badge badge--active"><svg viewBox="0 0 10 10"><circle cx="5" cy="5" r="5"/></svg>ACTIF</span>`
-                                }</td>
+                        ? `<span class="badge badge--banned"><svg viewBox="0 0 10 10"><circle cx="5" cy="5" r="5"/></svg>BANNI</span>`
+                        : `<span class="badge badge--active"><svg viewBox="0 0 10 10"><circle cx="5" cy="5" r="5"/></svg>ACTIF</span>`
+                    }</td>
                                 <td><div class="col-actions">
                                     ${u.id === Session.id() ? '<span style="font-size:.75rem;color:var(--secondary)">Vous</span>' :
-                                        u.is_banned
-                                        ? `<button class="action-sm action-sm--success" onclick="confirmUnban(${u.id})">Débannir</button>`
-                                        : `<button class="action-sm action-sm--warn" onclick="confirmBan(${u.id})">Bannir</button>`
-                                    }
+                        u.is_banned
+                            ? `<button class="action-sm action-sm--success" onclick="confirmUnban(${u.id})">Débannir</button>`
+                            : `<button class="action-sm action-sm--warn" onclick="confirmBan(${u.id})">Bannir</button>`
+                    }
                                 </div></td>
                             </tr>`).join('')}
                         </tbody>
                     </table>`;
-            } catch(err) { panel.innerHTML = `<div class="yo-empty">${err.message}</div>`; }
+            } catch (err) { panel.innerHTML = `<div class="yo-empty">${err.message}</div>`; }
         }
 
         function confirmBan(id) {
@@ -242,7 +278,7 @@
         function showConfirm(title, text, action, type = 'danger') {
             pendingAction = action;
             document.getElementById('confirmTitle').textContent = title;
-            document.getElementById('confirmText').textContent  = text;
+            document.getElementById('confirmText').textContent = text;
             const btn = document.getElementById('confirmOkBtn');
             btn.style.background = type === 'success' ? '#2a9d5c' : type === 'warn' ? '#e07b2a' : '#c0392b';
             document.getElementById('confirmOverlay').classList.add('show');
@@ -250,14 +286,15 @@
         function closeConfirm() { document.getElementById('confirmOverlay').classList.remove('show'); pendingAction = null; }
         async function doConfirm() {
             if (!pendingAction) return;
-            try { await pendingAction(); } catch(err) { toast(err.message, 'error'); }
+            try { await pendingAction(); } catch (err) { toast(err.message, 'error'); }
             closeConfirm();
         }
         document.getElementById('confirmOverlay').addEventListener('click', e => { if (e.target === e.currentTarget) closeConfirm(); });
 
-        function escHtml(s) { return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+        function escHtml(s) { return (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
 
         loadAll();
     </script>
 </body>
+
 </html>

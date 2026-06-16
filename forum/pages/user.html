@@ -1,38 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Yo. - Profil utilisateur</title>
+    <link rel="icon" type="image/x-icon" href="./assets/icon.ico">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="../styles/main.css">
     <link rel="stylesheet" href="../styles/home.css">
     <link rel="stylesheet" href="../styles/profile.css">
     <link rel="stylesheet" href="../styles/user.css">
 </head>
+
 <body>
     <aside class="sidebar" id="sidebar">
         <div class="sidebar__logo"><span class="logo-text">Y.</span></div>
         <nav class="sidebar__nav">
             <ul>
-                <li title="Home"><a href="../index.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg></a></li>
-                <li title="New post"><a href="./create.html" class="add-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg></a></li>
-                <li title="Profile"><a href="./profile.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></a></li>
-                <li title="Notifications" style="position:relative"><a href="./notifications.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg><span class="notif-dot"></span></a></li>
-                <li title="Admin"><a href="./admin.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></a></li>
+                <li title="Home"><a href="../index.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z" />
+                            <path d="M9 21V12h6v9" />
+                        </svg></a></li>
+                <li title="New post"><a href="./create.html" class="add-btn"><svg viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 5v14M5 12h14" />
+                        </svg></a></li>
+                <li title="Profile"><a href="./profile.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+                            <circle cx="12" cy="7" r="4" />
+                        </svg></a></li>
+                <li title="Notifications" style="position:relative"><a href="./notifications.html"><svg
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9" />
+                            <path d="M13.73 21a2 2 0 01-3.46 0" />
+                        </svg><span class="notif-dot"></span></a></li>
+                <li title="Admin"><a href="./admin.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <path
+                                d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                        </svg></a></li>
             </ul>
         </nav>
         <div class="sidebar__login"><a href="./login.html" class="login-btn">Log out</a></div>
     </aside>
 
     <main class="container profile-page">
-        <a href="../index.html" class="ghost back-btn" style="display:inline-flex;align-items:center;gap:.4rem;margin-bottom:1.5rem">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+        <a href="../index.html" class="ghost back-btn"
+            style="display:inline-flex;align-items:center;gap:.4rem;margin-bottom:1.5rem">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+                stroke-linejoin="round" style="width:16px;height:16px">
+                <line x1="19" y1="12" x2="5" y2="12" />
+                <polyline points="12 19 5 12 12 5" />
+            </svg>
             Retour
         </a>
-        <div id="userContainer"><div class="yo-spinner"></div></div>
+        <div id="userContainer">
+            <div class="yo-spinner"></div>
+        </div>
     </main>
 
     <script src="../js/api.js"></script>
@@ -45,8 +78,8 @@
 
         if (Session.id() && Session.id() == userId) window.location.href = '/pages/profile.html';
 
-        let friendshipId  = null;
-        let friendState   = 'none';
+        let friendshipId = null;
+        let friendState = 'none';
 
         async function loadUser() {
             try {
@@ -95,11 +128,11 @@
                 <div class="topic">${topics.length ? topics.map(t => `
                     <article class="topic__msg">
                         <div class="info">
-                            <div class="author"><div class="avatar-wrap">${avatar(t.avatar_url, t.author, 32)}</div><div class="author__meta"><span class="author__name">${escHtml(t.author)}</span><span class="author__tag">${(t.tags[0]||'GÉNÉRAL').toUpperCase()}</span></div></div>
+                            <div class="author"><div class="avatar-wrap">${avatar(t.avatar_url, t.author, 32)}</div><div class="author__meta"><span class="author__name">${escHtml(t.author)}</span><span class="author__tag">${(t.tags[0] || 'GÉNÉRAL').toUpperCase()}</span></div></div>
                             <div class="date">${timeAgo(t.created_at).toUpperCase()}</div>
                         </div>
-                        <span class="topic-status topic-status--${t.state}"><svg viewBox="0 0 10 10"><circle cx="5" cy="5" r="5"/></svg>${t.state==='open'?'OUVERT':t.state==='closed'?'FERMÉ':'ARCHIVÉ'}</span>
-                        <div class="message" onclick="window.location.href='./post.html?id=${t.id}'" style="cursor:pointer"><h2>${escHtml(t.title)}</h2><p>${escHtml((t.body||'').substring(0,150))}…</p></div>
+                        <span class="topic-status topic-status--${t.state}"><svg viewBox="0 0 10 10"><circle cx="5" cy="5" r="5"/></svg>${t.state === 'open' ? 'OUVERT' : t.state === 'closed' ? 'FERMÉ' : 'ARCHIVÉ'}</span>
+                        <div class="message" onclick="window.location.href='./post.html?id=${t.id}'" style="cursor:pointer"><h2>${escHtml(t.title)}</h2><p>${escHtml((t.body || '').substring(0, 150))}…</p></div>
                     </article>`).join('') : '<div class="yo-empty">Aucun topic.</div>'}</div>`;
         }
 
@@ -112,8 +145,8 @@
         async function addFriend() {
             try {
                 const data = await post('/friends', { requester_id: Session.id(), receiver_id: parseInt(userId) });
-                friendState   = 'pending';
-                friendshipId  = data.friendshipId;
+                friendState = 'pending';
+                friendshipId = data.friendshipId;
                 document.querySelector('.profile-actions').innerHTML = friendButtonHtml();
                 toast('Demande envoyée !', 'success');
             } catch (err) { toast(err.message, 'error'); }
@@ -123,16 +156,17 @@
             if (!confirm('Retirer cet ami ?')) return;
             try {
                 await del(`/friends/${Session.id()}/${userId}`);
-                friendState  = 'none';
+                friendState = 'none';
                 friendshipId = null;
                 document.querySelector('.profile-actions').innerHTML = friendButtonHtml();
                 toast('Ami retiré', 'info');
             } catch (err) { toast(err.message, 'error'); }
         }
 
-        function escHtml(s) { return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+        function escHtml(s) { return (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
 
         loadUser();
     </script>
 </body>
+
 </html>
